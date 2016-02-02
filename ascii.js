@@ -1,10 +1,6 @@
 var http = require('http');
-var fs = require('fs');
 
-var delimiter = '________\n';
-var frames = fs.readFileSync('rr.txt', 'utf8').split(delimiter);
-
-function play(response, cb) {
+function play(response, frames, cb) {
   (function loop(frames) {
     response.write('\033[2J');
     var frame = frames.shift();

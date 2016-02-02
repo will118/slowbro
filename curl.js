@@ -1,13 +1,15 @@
 var http = require('http');
 var exec = require('child_process').exec;
 var ascii = require('./ascii');
+var fs = require('fs');
 
+var delimiter = '________\n';
+var frames = fs.readFileSync('rr.txt', 'utf8').split(delimiter);
 
 function toiletInvoke(msg, cb) {
   var cmd = 'toilet -f mono12 -F metal ' + msg;
   exec(cmd, function(error, stdout, stderr) { cb(stdout); });
 }
-
 
 function finalScene(stdout, response) {
   var multiplier = 100;
@@ -32,7 +34,7 @@ function finalScene(stdout, response) {
   });
 
   setTimeout(function() {
-    ascii(response, function(text) {
+    ascii(response, frames, function(text) {
       response.end(text);
     });
   }, dissolveTimes[dissolveTimes.length - 1] + 100);

@@ -4,7 +4,26 @@ http.createServer(function(request, response) {
   response.setHeader('Content-Type', 'text/html; charset=UTF-8');
   response.setHeader('Transfer-Encoding', 'chunked');
 
+  var ascii =
+    "<!--\n" +
+    "                                                          \n" +
+    "           ..|'''.| '||''|.       |     '||''|.           \n" +
+    "         .|'     '   ||   ||     |||     ||   ||          \n" +
+    "         ||          ||''|'     |  ||    ||...|'          \n" +
+    "         '|.      .  ||   |.   .''''|.   ||               \n" +
+    "          ''|....'  .||.  '|' .|.  .||. .||.              \n" +
+    "                                                          \n" +
+    "                                                          \n" +
+    "         |''||''| '||''''|    ..|'''.| '||'  '||'         \n" +
+    "            ||     ||  .    .|'     '   ||    ||          \n" +
+    "            ||     ||''|    ||          ||''''||          \n" +
+    "            ||     ||       '|.      .  ||    ||          \n" +
+    "           .||.   .||.....|  ''|....'  .||.  .||.         \n" +
+    "                                                          \n" +
+    "-->\n\n";
+
   var html =
+    ascii +
     '<!DOCTYPE html>' +
     '<html lang="en">' +
     '<head>' +
