@@ -3,8 +3,7 @@ var exec = require('child_process').exec;
 var ascii = require('./ascii');
 var fs = require('fs');
 
-var delimiter = '________\n';
-var frames = fs.readFileSync('rr.txt', 'utf8').split(delimiter);
+var rawFrameString = fs.readFileSync('rr.txt', 'utf8');
 
 function toiletInvoke(msg, cb) {
   var cmd = 'toilet -f mono12 -F metal ' + msg;
@@ -34,7 +33,7 @@ function finalScene(stdout, response) {
   });
 
   setTimeout(function() {
-    ascii(response, frames, function(text) {
+    ascii(response, rawFrameString, function(text) {
       response.end(text);
     });
   }, dissolveTimes[dissolveTimes.length - 1] + 100);

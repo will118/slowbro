@@ -1,19 +1,26 @@
 var http = require('http');
 
-function play(response, frames, cb) {
+function play(response, frameString, cb) {
+  var rawFrames = frameString.split('\n');
+  var frames = [];
+  var size = 14;
+
+  for (var i = 0; i < rawFrames.length; i += size) {
+    frames.push(rawFrames.slice(i, size + i));
+  }
+
   (function loop(frames) {
     response.write('\033[2J');
-    var frame = frames.shift();
-    var lines = frame.split('\n');
-    var delayLine = parseInt(lines.shift(), 10);
-    lines.unshift('\n');
-    response.write(lines.join('\n'));
+    var frameLines = frames.shift();
+    var delayLine = parseInt(frameLines.shift(), 10);
+    frameLines.unshift('\n');
+    response.write(frameLines.join('\n'));
     if (frames.length > 0) {
       setTimeout(loop, delayLine * 100, frames);
     } else {
       cb('\033[2J\n:)\n');
     }
-  })(frames.slice())
+  })(frames)
 }
 
 module.exports = play;
