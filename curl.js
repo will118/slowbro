@@ -49,4 +49,3 @@ http.createServer(function(request, response) {
   response.write('\033[2J');
   setTimeout(toilet, 500, ['WELCOME', 'TO', 'CRAPTECH'], response);
 }).listen(3000);
-
