@@ -1,1 +1,1 @@
-`curl -N crap.tech`
+`curl crap.tech`
