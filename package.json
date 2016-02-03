@@ -1,0 +1,23 @@
+{
+  "name": "slowbro",
+  "version": "1.0.0",
+  "description": "`curl crap.tech`",
+  "main": "ascii.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/will118/slowbro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/will118/slowbro/issues"
+  },
+  "homepage": "https://github.com/will118/slowbro#readme",
+  "dependencies": {
+    "image-to-ascii": "^2.3.1"
+  }
+}
