@@ -2,8 +2,10 @@ const fs = require('fs');
 const http = require('http');
 const processVideo = require('./processor');
 
+const ROOT_FOLDER = '/data/simpsons';
+
 function getFrame(season, episode, index, cb) {
-  fs.readFile(`${season}/${episode}/${index}.txt`, 'utf8', (err, data) => {
+  fs.readFile(`${ROOT_FOLDER}/${season}/${episode}/${index}.txt`, 'utf8', (err, data) => {
     if (data) {
       cb(null, data);
     } else {
@@ -13,7 +15,7 @@ function getFrame(season, episode, index, cb) {
 }
 
 function returnAvailableEpisodes(response) {
-  fs.readdir('source', (err, files) => {
+  fs.readdir(`${ROOT_FOLDER}/source`, (err, files) => {
     const episodes = files.map(x => x.replace('.mp4', ''));
     episodes.sort();
     response.write('Available episodes:\n\n');
@@ -40,15 +42,20 @@ http.createServer(function(request, response) {
     if (!sourceExists) {
       returnAvailableEpisodes(response);
     } else {
-      const path = `${season}/${episode}`;
-      function loop(index) {
+      const path = `${ROOT_FOLDER}/${season}/${episode}`;
+      function loop(index, retryCount) {
         getFrame(season, episode, index, (err, frame) => {
           if (frame) {
             response.write('\033[2H');
             response.write(frame);
             setTimeout(loop, 66, index + 1);
           } else {
-            response.end('It went great || I couldn\'t make the frame in time.\n');
+            if (10 > retryCount) {
+              response.end('Hold on...\n');
+              loop(index, retryCount + 1);
+            } else {
+              response.end('It went great || I couldn\'t make the frame in time.\n');
+            }
           }
         });
       }
@@ -56,10 +63,10 @@ http.createServer(function(request, response) {
       fs.stat(path, (err, stats) => {
         // assume if theres a folder its got good files. no doubt.
         if (stats) {
-          loop(1);
+          loop(1, 0);
         } else {
           response.write('hold on... charging up the callback cannon\n\n');
-          processVideo(season, episode, () => loop(1));
+          processVideo(season, episode, () => loop(1, 0));
         }
       });
     }
