@@ -15,20 +15,26 @@ function processVideo(season, episode, onStart) {
 
       spawn('ffmpeg', ffmpegArgs);
 
-      onStart();
-
-      fs.watch(framePath, (event, filename) => {
-        if (filename && filename.endsWith('png')) {
+      setTimeout(() => {
+        (function asciiLoop(index) {
+          const filename = `${index}.png`;
           const imagePath = `${__dirname}/${framePath}/${filename}`;
-          ImageToAscii(imagePath, (err, data) => {
+          const options = {
+            path: imagePath
+          };
+
+          ImageToAscii(options, (err, data) => {
             if (err) throw err;
             const asciiFilename = filename.replace('png', 'txt');
             fs.writeFile(`${framePath}/${asciiFilename}`, data, (err) => {
               if (err) throw err;
+              asciiLoop(index + 1);
             });
           });
-        }
-      });
+        })(1);
+
+        setTimeout(onStart, 3000);
+      }, 1000);
     });
   });
 }
