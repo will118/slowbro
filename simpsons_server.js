@@ -1,6 +1,6 @@
 const fs = require('fs');
 const http = require('http');
-const processVideo = require('./jitter');
+const processVideo = require('./processor');
 
 function getFrame(season, episode, index, cb) {
   fs.readFile(`${season}/${episode}/${index}.txt`, 'utf8', (err, data) => {
@@ -23,7 +23,6 @@ http.createServer(function(request, response) {
   const path = `${season}/${episode}`;
 
   function loop(index) {
-    console.log('loop', index);
     getFrame(season, episode, index, (err, frame) => {
       if (frame) {
         response.write('\033[2H');
@@ -41,7 +40,7 @@ http.createServer(function(request, response) {
 //      loop(1);
 //    } else {
       response.write('hold on... firing up the callback cannon\n\n');
-      processVideo(episode, season, () => setTimeout(() => loop(1), 1000));
+      processVideo(episode, season, () => setTimeout(loop, 10000, 1));
 //    }
   });
 
