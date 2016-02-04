@@ -18,7 +18,11 @@ function processVideo(season, episode, onStart) {
 
       fs.watch(framePath, (event, filename) => {
         if (filename && filename.endsWith('png')) {
-          ImageToAscii(`${__dirname}/${framePath}/${filename}`, (err, data) => {
+          const imagePath = `${__dirname}/${framePath}/${filename}`;
+          console.log('watcher:', filename);
+          ImageToAscii(imagePath, (err, data) => {
+            console.log('Generated ASCII');
+            if (err) throw err;
             const asciiFilename = filename.replace('png', 'txt');
             fs.writeFile(`${framePath}/${asciiFilename}`, data, (err) => {
               if (err) throw err;

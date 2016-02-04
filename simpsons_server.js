@@ -14,6 +14,7 @@ function getFrame(season, episode, index, cb) {
 
 http.createServer(function(request, response) {
   response.setHeader('Transfer-Encoding', 'chunked');
+  response.write('\033[2J');
   response.write('\033[200B');
   response.write('\033[2H');
 
@@ -22,6 +23,7 @@ http.createServer(function(request, response) {
   const path = `${season}/${episode}`;
 
   function loop(index) {
+    console.log('loop', index);
     getFrame(season, episode, index, (err, frame) => {
       if (frame) {
         response.write('\033[2H');
@@ -35,12 +37,12 @@ http.createServer(function(request, response) {
 
   fs.stat(path, (err, stats) => {
     // assume if theres a folder its got good files. no doubt.
-    if (stats) {
-      loop(1);
-    } else {
+//    if (stats) {
+//      loop(1);
+//    } else {
       response.write('hold on... firing up the callback cannon\n\n');
-      processVideo(episode, season, () => setTimeout(loop, 1000, 1));
-    }
+      processVideo(episode, season, () => setTimeout(() => loop(1), 1000));
+//    }
   });
 
 }).listen(3003);
