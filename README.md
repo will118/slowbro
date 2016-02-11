@@ -1,1 +1,0 @@
-`curl crap.tech`
